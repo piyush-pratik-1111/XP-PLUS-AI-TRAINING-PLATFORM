@@ -310,6 +310,8 @@ function fallbackResponse(answer) {
 }
 
 // ================== SERVER ==================
-app.listen(3001, () => {
-  console.log("✅ AI server running on http://localhost:3001");
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`✅ AI server running on port ${PORT}`);
 });

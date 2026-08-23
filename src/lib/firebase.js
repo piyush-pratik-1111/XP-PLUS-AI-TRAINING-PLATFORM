@@ -1,22 +1,19 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { GoogleAuthProvider } from "firebase/auth";
 
-// Your config (keep as is)
 const firebaseConfig = {
-  apiKey: "AIzaSyDXNzCsqGldCLaIvP5KywSkdTMwRiwVDI0",
-  authDomain: "xp-plus-ee521.firebaseapp.com",
-  projectId: "xp-plus-ee521",
-  storageBucket: "xp-plus-ee521.firebasestorage.app",
-  messagingSenderId: "1077779938362",
-  appId: "1:1077779938362:web:533fcfee797dacab690903",
-  measurementId: "G-ZHFFPV5EPR"
+  apiKey: "AIzaSyB7CXInRsaeHAnRK1qVcIynusyBRm2wIJU",
+  authDomain: "xp-plus-ai-training-platform.firebaseapp.com",
+  projectId: "xp-plus-ai-training-platform",
+  storageBucket: "xp-plus-ai-training-platform.firebasestorage.app",
+  messagingSenderId: "715866902219",
+  appId: "1:715866902219:web:81fb4a92e0137fe889554e",
+  measurementId: "G-0CFV5CX7RV"
 };
 
 const app = initializeApp(firebaseConfig);
 
-// ✅ ADD THESE
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const googleProvider = new GoogleAuthProvider();
