@@ -194,7 +194,7 @@ ${answer}
 
 console.log("🧠 RAW:", raw);
 
-// 🔥 DETECT MODEL REFUSAL (THIS IS THE FIX)
+// Detect model refusal
 const refusalPatterns = [
   "can't engage",
   "cannot provide",
@@ -230,26 +230,51 @@ if (isRefusal) {
     flagged: true,
   });
 }
-    // 🔥 NORMALIZE OUTPUT (VERY IMPORTANT)
-    parsed = {
-      summary: parsed.summary || "No summary provided",
-      scores: {
-        empathy: parsed.scores?.empathy ?? 0,
-        clarity: parsed.scores?.clarity ?? 0,
-        logic: parsed.scores?.logic ?? 0,
-        emotional_intelligence:
-          parsed.scores?.emotional_intelligence ?? 0,
-        creativity: parsed.scores?.creativity ?? 0,
-      },
-      strengths: parsed.strengths || [],
-      improvements: parsed.improvements || [],
-      xp: parsed.xp ?? 0,
-      flagged: parsed.flagged ?? false,
-    };
 
-    return res.json(parsed);
+// Parse AI JSON response
+let parsed;
 
-  } catch (error) {
+try {
+  const cleaned = raw
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .trim();
+
+  parsed = JSON.parse(cleaned);
+} catch (parseError) {
+  console.error("❌ AI JSON PARSE ERROR:", parseError.message);
+
+  return res.json(fallbackResponse(answer));
+}
+
+// Normalize AI output
+parsed = {
+  summary: parsed.summary || "No summary provided",
+
+  scores: {
+    empathy: parsed.scores?.empathy ?? 0,
+    clarity: parsed.scores?.clarity ?? 0,
+    logic: parsed.scores?.logic ?? 0,
+    emotional_intelligence:
+      parsed.scores?.emotional_intelligence ?? 0,
+    creativity: parsed.scores?.creativity ?? 0,
+  },
+
+  strengths: Array.isArray(parsed.strengths)
+    ? parsed.strengths
+    : [],
+
+  improvements: Array.isArray(parsed.improvements)
+    ? parsed.improvements
+    : [],
+
+  xp: parsed.xp ?? 0,
+  flagged: parsed.flagged ?? false,
+};
+
+return res.json(parsed);
+
+ } catch (error) {
     console.error("🔥 AI ERROR:", error.message);
     return res.json(fallbackResponse(answer));
   }
