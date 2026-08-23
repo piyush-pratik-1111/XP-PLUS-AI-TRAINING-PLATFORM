@@ -55,17 +55,18 @@ export default function Signup() {
 };
 
   // 🔹 GOOGLE SIGNUP
-  const handleGoogleSignup = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
+ const handleGoogleSignup = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
 
-      await saveUser(result.user);
+    await createOrGetUser(result.user);
 
-      navigate("/scenarios");
-    } catch (err) {
-      alert("Google sign-up failed");
-    }
-  };
+    navigate("/scenarios");
+  } catch (err) {
+    console.error("GOOGLE SIGNUP ERROR:", err);
+    alert(err.message || "Google sign-up failed");
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#3A7BFF] to-[#23C4C7] px-4">
